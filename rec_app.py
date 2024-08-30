@@ -15,11 +15,11 @@ headers = {
 
 def get_poster(movie_id):
     url="https://api.themoviedb.org/3/movie/{}?language=en-US".format(movie_id)
-    print(url)
+    #print(url)
     data = requests.get(url, headers=headers)
     data = data.json()
     poster_address = "https://image.tmdb.org/t/p/w500/" + data['poster_path']
-    print(data)
+    #print(data)
     return poster_address
 
 def recommendme(movie):
@@ -52,6 +52,7 @@ if st.button("Get Recommendations"):
         with cols_row1[i]:
             st.text(rec_movie_name[i])
             st.image(rec_movie_poster[i])
+
     for i in range(6, 11):
         with cols_row2[i-5]:
             st.text(rec_movie_name[i])
