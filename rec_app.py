@@ -27,7 +27,7 @@ def recommendme(movie):
     distance = sorted(list(enumerate(similarity_matrix[index])), reverse=True, key=lambda vector1:vector1[1])
     rec_movie=[]
     rec_poster=[]
-    for i in distance[0:10]:
+    for i in distance[0:11]:
         movie_id = mv1.iloc[i[0]].id
         rec_movie.append(mv1.iloc[i[0]].title)
         rec_poster.append(get_poster(movie_id))
