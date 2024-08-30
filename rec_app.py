@@ -1,6 +1,7 @@
 import streamlit as st
 import pickle
 import requests
+import pandas as pd
 
 mv1 = pickle.load(open('movies.pkl', 'rb'))
 movie_list = mv1['title'].values
@@ -41,17 +42,27 @@ def recommendme(movie):
 
 st.title("Movie Recommendation System Based On Current User Rating")
 
-movie_selected = st.selectbox("Select a movie that you have watched", movie_list)
+movie_selected = st.selectbox("Select A Movie", movie_list)
 
-min_rating = st.text_input("Minimun User Rating (optional)")
+min_rating = 0
+min_rating = float(st.text_input("Minimun User Rating out of 10 (Optional)"))
+
 
 if st.button("Get Recommendations"):
     rec_movie_name, rec_movie_poster,rec_movie_rating = recommendme(movie_selected)
-    print(rec_movie_name)
+    rec_df = pd.DataFrame({
+        'title' : rec_movie_name,
+        'poster path' : rec_movie_poster,
+        'user rating': rec_movie_rating
+    })
+    #print(rec_movie_name)
+    if min_rating != 0:
+        rec_df = rec_df[rec_df['user rating'] >= min_rating]
+
     cols_row0 = st.columns(5)
     with cols_row0[2]:
         #st.text(rec_movie_name[0])
-        st.image(rec_movie_poster[0])
+        st.image(rec_df[1][0])
 
 
     # Display the first 5 movies in the first row and 5 movies in the second row
@@ -63,15 +74,15 @@ if st.button("Get Recommendations"):
     
     for i in range(1,6):
         with cols_row1[i-1]:
-            st.image(rec_movie_poster[i])
-            st.text(rec_movie_name[i])
-            st.text("{}/10".format(rec_movie_rating[i]))
+            st.image(rec_df[1][i])
+            st.text(rec_df[0][i])
+            st.text("{}/10".format(rec_df[2][i]))
 
     for i in range(6, 11):
         with cols_row2[i-6]:
-            st.image(rec_movie_poster[i])
-            st.text(rec_movie_name[i])
-            st.text("{}/10".format(rec_movie_rating[i]))
+            st.image(rec_df[1][i])
+            st.text(rec_df[0][i])
+            st.text("{}/10".format(rec_df[2][i]))
 
     
 
