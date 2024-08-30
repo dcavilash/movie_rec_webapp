@@ -43,16 +43,22 @@ if st.button("Get Recommendations"):
     rec_movie_name, rec_movie_poster = recommendme(movie_selected)
 
     col0 = st.columns(1)
-    col1, col2, col3, col4, col5 = st.columns(5)
-    col6, col7, col8, col9, col10 = st.columns(5)
+    # Display the first 5 movies in the first row and 5 movies in the second row
+    cols_row1 = st.columns(5)
+    cols_row2 = st.columns(5)
+
+    
+    for i in range(5):
+       with cols_row1[i]:
+           st.text(rec_movie_name[i])
+           st.image(rec_movie_poster[i])
+    for i in range(5, 10):
+        with cols_row2[i - 5]:
+            st.text(rec_movie_name[i])
+            st.image(rec_movie_poster[i])
 
     with col0[0]:
         st.text(rec_movie_name[0])
         st.image(rec_movie_poster[0])
-    for i in range(1,11):
-        col = "col" + str(i)
-        with col:
-            st.text(rec_movie_name[i])
-            st.image(rec_movie_poster[i])
 
 
