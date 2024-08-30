@@ -45,7 +45,7 @@ st.title("Movie Recommendation System Based On Current User Rating")
 movie_selected = st.selectbox("Select A Movie", movie_list)
 
 min_rating = 0
-min_rating = float(st.text_input("Minimun User Rating out of 10 (Optional)"))
+min_rating = float(st.number_input("Minimun User Rating out of 10 (Optional)"))
 
 
 if st.button("Get Recommendations"):
