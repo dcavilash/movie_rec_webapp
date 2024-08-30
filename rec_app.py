@@ -42,7 +42,7 @@ def recommendme(movie):
 
 st.title("Movie Recommendation System With Current User Rating filter")
 st.header("by Avilash Barua")
-st.divider
+st.divider()
 
 movie_selected = st.selectbox("Select or Search a Movie", movie_list)
 
