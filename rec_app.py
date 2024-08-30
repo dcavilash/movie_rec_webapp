@@ -49,11 +49,11 @@ if st.button("Get Recommendations"):
 
     
     for i in range(1,6):
-       with cols_row1[i]:
-           st.text(rec_movie_name[i])
-           st.image(rec_movie_poster[i])
+        with cols_row1[i]:
+            st.text(rec_movie_name[i])
+            st.image(rec_movie_poster[i])
     for i in range(6, 11):
-        with cols_row2[i - 5]:
+        with cols_row2[i]:
             st.text(rec_movie_name[i])
             st.image(rec_movie_poster[i])
 
