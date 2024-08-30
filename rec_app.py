@@ -40,7 +40,9 @@ def recommendme(movie):
 
 #Page design
 
-st.title("Movie Recommendation System Based On Current User Rating")
+st.title("Movie Recommendation System With Current User Rating filter")
+st.header("by Avilash Barua")
+st.divider
 
 movie_selected = st.selectbox("Select A Movie", movie_list)
 
@@ -84,4 +86,3 @@ if st.button("Get Recommendations"):
             st.image(rec_df.iloc[i]['poster path'])
             st.text(rec_df.iloc[i]['title'])
             st.text("{}/10".format(rec_df.iloc[i]['user rating']))
-
