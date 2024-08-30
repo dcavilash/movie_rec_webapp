@@ -42,8 +42,9 @@ movie_selected = st.selectbox("Select a movie that you have watched", movie_list
 if st.button("Get Recommendations"):
     rec_movie_name, rec_movie_poster = recommendme(movie_selected)
     print(rec_movie_name)
-    col0 = st.columns(1)
+    cols_row0 = st.columns(3)
     # Display the first 5 movies in the first row and 5 movies in the second row
+    st.text("You might like")
     cols_row1 = st.columns(5)
     cols_row2 = st.columns(5)
 
@@ -58,7 +59,7 @@ if st.button("Get Recommendations"):
             st.text(rec_movie_name[i])
             st.image(rec_movie_poster[i])
 
-    with col0[0]:
+    with cols_row0[1]:
         st.text(rec_movie_name[0])
         st.image(rec_movie_poster[0])
 
