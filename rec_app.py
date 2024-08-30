@@ -46,7 +46,7 @@ if st.button("Get Recommendations"):
 #    col1, col2, col3, col4, col5 = st.beta_columns(5)
 #    col6, col7, col8, col9, col10 = st.beta_columns(5)
 
-    with col0:
+    with col0[0]:
         st.text(rec_movie_name[0])
         st.image(rec_movie_poster[0])
 #    for i in range(1,11):
