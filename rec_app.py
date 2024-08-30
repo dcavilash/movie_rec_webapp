@@ -44,7 +44,7 @@ st.title("Movie Recommendation System With Current User Rating filter")
 st.header("by Avilash Barua")
 st.divider
 
-movie_selected = st.selectbox("Select A Movie", movie_list)
+movie_selected = st.selectbox("Select or Search a Movie", movie_list)
 
 min_rating = 0
 min_rating = float(st.number_input("Minimun User Rating out of 10 (Optional)"))
