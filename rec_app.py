@@ -43,6 +43,8 @@ st.title("Movie Recommendation System Based On Current User Rating")
 
 movie_selected = st.selectbox("Select a movie that you have watched", movie_list)
 
+min_rating = st.text_input("Minimun User Rating (optional)")
+
 if st.button("Get Recommendations"):
     rec_movie_name, rec_movie_poster,rec_movie_rating = recommendme(movie_selected)
     print(rec_movie_name)
