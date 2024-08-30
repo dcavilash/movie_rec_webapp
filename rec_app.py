@@ -49,41 +49,39 @@ min_rating = float(st.number_input("Minimun User Rating out of 10 (Optional)"))
 
 
 if st.button("Get Recommendations"):
-    rec_movie_name, rec_movie_poster,rec_movie_rating = recommendme(movie_selected)
+    rec_movie_name, rec_movie_poster, rec_movie_rating = recommendme(movie_selected)
+    
     rec_df = pd.DataFrame({
-        'title' : rec_movie_name,
-        'poster path' : rec_movie_poster,
+        'title': rec_movie_name,
+        'poster path': rec_movie_poster,
         'user rating': rec_movie_rating
     })
-    #print(rec_movie_name)
+    
+    # Filter by minimum rating if applicable
     if min_rating != 0:
         rec_df = rec_df[rec_df['user rating'] >= min_rating]
-
+    
     cols_row0 = st.columns(5)
     with cols_row0[2]:
-        #st.text(rec_movie_name[0])
-        st.image(rec_df[1][0])
-
-
-    # Display the first 5 movies in the first row and 5 movies in the second row
-    st.text("You might like")
+        st.image(rec_df.iloc[0]['poster path'])  # Use .iloc to access the first row
+        #st.text(rec_df.iloc[0]['title'])
+        #st.text("{}/10".format(rec_df.iloc[0]['user rating']))
+    
+    # Display the next 10 movies in two rows of 5
+    st.text("You might like:")
+    
     cols_row1 = st.columns(5)
-    st.text("                              ")
     cols_row2 = st.columns(5)
-
     
-    for i in range(1,6):
-        with cols_row1[i-1]:
-            st.image(rec_df[1][i])
-            st.text(rec_df[0][i])
-            st.text("{}/10".format(rec_df[2][i]))
-
+    for i in range(1, 6):
+        with cols_row1[i - 1]:
+            st.image(rec_df.iloc[i]['poster path'])
+            st.text(rec_df.iloc[i]['title'])
+            st.text("{}/10".format(rec_df.iloc[i]['user rating']))
+    
     for i in range(6, 11):
-        with cols_row2[i-6]:
-            st.image(rec_df[1][i])
-            st.text(rec_df[0][i])
-            st.text("{}/10".format(rec_df[2][i]))
-
-    
-
+        with cols_row2[i - 6]:
+            st.image(rec_df.iloc[i]['poster path'])
+            st.text(rec_df.iloc[i]['title'])
+            st.text("{}/10".format(rec_df.iloc[i]['user rating']))
 
