@@ -21,28 +21,22 @@ def recommendme(movie, min_rating):
     index = mv1[mv1['title'] == movie].index[0]
     distances = sorted(list(enumerate(similarity_matrix[index])), reverse=True, key=lambda x: x[1])
 
-    mv1_df = pd.DataFrame(mv1)
-    filtered_mv1_df = mv1_df[mv1_df['vote_average'] >= min_rating - 0.5]
-
-    # Add selected movie if it's lower than min_rating
-    #if index not in filtered_mv1_df['id'].values:
-    #    filtered_mv1_df = pd.concat([filtered_mv1_df, mv1_df[mv1_df['id'] == index].iloc[0].to_frame().T], ignore_index=True)
-    # Check if the selected movie is present in filtered_mv1_df before adding
-    if index in filtered_mv1_df['id'].values:
-        selected_movie = filtered_mv1_df[filtered_mv1_df['id'] == index]
-    else:
-        selected_movie = mv1_df[mv1_df['id'] == index]
-
-    # Only add the movie if it exists (avoid empty dataframe)
-    if not selected_movie.empty:
-        filtered_mv1_df = pd.concat([filtered_mv1_df, selected_movie.iloc[0].to_frame().T], ignore_index=True)
-
-    # Get the top 15 most similar movies
-    rec_df = filtered_mv1_df.iloc[[i[0] for i in distances[:15]]]
-    poster_rating_data = rec_df['id'].apply(get_poster_and_rating)
-    rec_df['poster path'], rec_df['user rating'] = zip(*poster_rating_data)
-
-    return rec_df[rec_df['user rating'] >= min_rating]
+    rec_movie=[]
+    rec_poster=[]
+    rec_rating=[]
+    for i in distances[0:100]:
+        movie_id = mv1.iloc[i[0]].id
+        poster_address, rating = get_poster_and_rating(movie_id)
+        if rating >= min_rating:
+            rec_movie.append(mv1.iloc[i[0]].title)
+            rec_poster.append(poster_address)
+            rec_rating.append(rating)
+            
+        rec_df = pd.DataFrame({'title': rec_movie,'poster path': rec_poster,'user rating': rec_rating})
+        if len(rec_df) >= 11:
+            break
+    
+    return rec_df
 
 st.title("Movie Recommendation System With Current User Rating Filter")
 st.subheader("by Avilash Barua")
@@ -58,32 +52,24 @@ with col2:
 
 if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating)
-    num_recommendations = len(rec_df)
 
-    if num_recommendations > 0:
-        # Display main movie (first row)
-        cols_row0 = st.columns(4)
-        with cols_row0[1]:
-            st.image(rec_df.iloc[0]['poster path'])
-        with cols_row0[2]:
-            st.text(f"{rec_df.iloc[0]['title']}\nUser Rating: {rec_df.iloc[0]['user rating']}/10")
-            st.divider()
+    cols_row0 = st.columns(4)
+    with cols_row0[1]:
+        st.image(rec_df.iloc[0]['poster path'])
+    with cols_row0[2]:
+        st.text(f"{rec_df.iloc[0]['title']}")
+        st.text(f"User Rating: {rec_df.iloc[0]['user rating']}/10")
+        st.divider()
 
-        # First row: 5 columns
-        if num_recommendations > 1:
-            cols_row1 = st.columns(5)
-            for i in range(1, min(6, num_recommendations)):  # Fill the first row, skipping the main movie
-                with cols_row1[i - 1]:
-                    st.image(rec_df.iloc[i]['poster path'])
-                    st.text(f"{rec_df.iloc[i]['title']}\n{rec_df.iloc[i]['user rating']}/10")
+    cols_row1 = st.columns(5)
+    for i in range(1, 6):  # Fill the first row, skipping the main movie
+        with cols_row1[i - 1]:
+            st.image(rec_df.iloc[i]['poster path'])
+            st.text(f"{rec_df.iloc[i]['title']}\n{rec_df.iloc[i]['user rating']}/10")
 
-        # Second row: Up to 5 columns if more than 5 recommendations
-        if num_recommendations > 6:
-            st.divider()
-            cols_row2 = st.columns(5)
-            for i in range(6, num_recommendations):  # Fill the second row
-                with cols_row2[i - 6]:
-                    st.image(rec_df.iloc[i]['poster path'])
-                    st.text(f"{rec_df.iloc[i]['title']}\n{rec_df.iloc[i]['user rating']}/10")
-    else:
-        st.write("Not enough recommendations.")
+    st.divider()
+    cols_row2 = st.columns(5)
+    for i in range(6, 11):  # Fill the second row
+        with cols_row2[i - 6]:
+            st.image(rec_df.iloc[i]['poster path'])
+            st.text(f"{rec_df.iloc[i]['title']}\n{rec_df.iloc[i]['user rating']}/10")
