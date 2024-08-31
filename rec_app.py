@@ -60,7 +60,7 @@ if movie_selected and movie_selected != "":
         with c21:
             st.image(m_sel_poster_address)
         with c22:
-            st.markdown(f"User Rating: \n**{m_sel_rating}**/10")
+            st.markdown(f"User Rating:<br><b><span style='font-size:20px'>{m_sel_rating}</b>/10", unsafe_allow_html=True)
 
 if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating)
@@ -69,12 +69,12 @@ if st.button("Get Recommendations"):
     for i in range(1, 6):  # Fill the first row
         with cols_row1[i - 1]:
             st.image(rec_df.iloc[i]['poster path'])
-            st.markdown(f"{rec_df.iloc[i]['title']}<br>**{rec_df.iloc[i]['user rating']}**/10", unsafe_allow_html=True)
+            st.markdown(f"{rec_df.iloc[i]['title']}<br><b><span style='font-size:20px'>{rec_df.iloc[i]['user rating']}</b>/10", unsafe_allow_html=True)
 
     st.divider()
     cols_row2 = st.columns(5)
     for i in range(6, 11):  # Fill the second row
         with cols_row2[i - 6]:
             st.image(rec_df.iloc[i]['poster path'])
-            st.markdown(f"{rec_df.iloc[i]['title']}<br>**{rec_df.iloc[i]['user rating']}**/10", unsafe_allow_html=True)
+            st.markdown(f"{rec_df.iloc[i]['title']}<br><b><span style='font-size:20px'>{rec_df.iloc[i]['user rating']}</b>/10", unsafe_allow_html=True)
 
