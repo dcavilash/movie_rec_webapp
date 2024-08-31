@@ -49,8 +49,7 @@ c1, c2 = st.columns(2)
 with c1:
     movie_selected = st.selectbox("Select or Search a Movie", [""] + movie_list)
     st.divider()
-    st.write("Minimum User Rating:")
-    min_rating = float(st.slider("", min_value=0.0, max_value=8.0, step=0.1, value=0.0))
+    min_rating = float(st.slider("Minimum User Rating:", min_value=0.0, max_value=8.0, step=0.1, value=0.0))
 
 if movie_selected and movie_selected != "":
     id = mv1[mv1['title'] == movie_selected]['id'].iloc[0]
