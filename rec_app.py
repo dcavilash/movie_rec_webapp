@@ -24,16 +24,28 @@ def get_poster_and_rating(movie_id):
     #print(data)
     return poster_address, rating
 
-def recommendme(movie):
+def recommendme(movie, min_rating):
     index=mv1[mv1['title']==movie].index[0]
     distance = sorted(list(enumerate(similarity_matrix[index])), reverse=True, key=lambda vector1:vector1[1])
+
+    mv1_df = pd.DataFrame(mv1)
+    # Filter by minimum rating if applicable
+    if min_rating != -1:
+        filtered_mv1_df = mv1_df[mv1_df['user rating'] >= min_rating]
+
+        # Need to add selected movie in the dataframe if its lower than min_rating entered
+
+        if index not in filtered_mv1_df['id'].values:
+            row_to_add = mv1_df[mv1_df['id'] == index].iloc[0]
+            filtered_mv1_df = pd.concat([filtered_mv1_df, row_to_add.to_frame().T], ignore_index=True)
+ 
     rec_movie=[]
     rec_poster=[]
     rec_rating=[]
     for i in distance[0:100]:
-        movie_id = mv1.iloc[i[0]].id
+        movie_id = filtered_mv1_df.iloc[i[0]].id
         poster_address, rating = get_poster_and_rating(movie_id)
-        rec_movie.append(mv1.iloc[i[0]].title)
+        rec_movie.append(filtered_mv1_df.iloc[i[0]].title)
         rec_poster.append(poster_address)
         rec_rating.append(rating)
     return rec_movie, rec_poster, rec_rating
@@ -46,12 +58,12 @@ st.divider()
 
 movie_selected = st.selectbox("Select or Search a Movie", movie_list)
 
-min_rating = 0
+min_rating = -1                                        #default value
 min_rating = float(st.number_input("Minimun User Rating out of 10 (Optional)"))
 
 
 if st.button("Get Recommendations"):
-    rec_movie_name, rec_movie_poster, rec_movie_rating = recommendme(movie_selected)
+    rec_movie_name, rec_movie_poster, rec_movie_rating = recommendme(movie_selected, min_rating)
     
     rec_df = pd.DataFrame({
         'title': rec_movie_name,
@@ -59,16 +71,18 @@ if st.button("Get Recommendations"):
         'user rating': rec_movie_rating
     })
     
-    # Filter by minimum rating if applicable
-    if min_rating != 0:
-        rec_df = rec_df[rec_df['user rating'] >= min_rating]
-    
-    cols_row0 = st.columns(5)
+    cols_row0 = st.columns(4)
+    with cols_row0[1]:
+        st.image(rec_df.iloc[0]['poster path'])
+        #
+        #
     with cols_row0[2]:
-        st.image(rec_df.iloc[0]['poster path'])  # Use .iloc to access the first row
-        #st.text(rec_df.iloc[0]['title'])
-        #st.text("{}/10".format(rec_df.iloc[0]['user rating']))
-    
+        st.text(rec_df.iloc[0]['title'])
+        st.divider()
+        st.text("User Rating: ")
+        st.text("{}/10".format(rec_df.iloc[0]['user rating']))
+
+
     # Display the next 10 movies in two rows of 5
     st.text("You might like:")
     
