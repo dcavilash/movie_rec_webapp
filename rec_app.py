@@ -47,8 +47,8 @@ st.divider()
 
 c1, c2 = st.columns(2)
 with c1:
-    movie_selected = st.selectbox("Select or Search a Movie", ["Search Bar"] + movie_list)
-if movie_selected and movie_selected != "Search Bar":
+    movie_selected = st.selectbox("Select or Search a Movie", [""] + movie_list)
+if movie_selected and movie_selected != "":
     id = mv1[mv1['title'] == movie_selected]['id'].iloc[0]
     m_sel_poster_address, m_sel_rating = get_poster_and_rating(id)
     with c2:
