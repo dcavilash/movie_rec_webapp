@@ -21,13 +21,16 @@ def recommendme(movie, min_rating):
     index = mv1[mv1['title'] == movie].index[0]
     distances = sorted(list(enumerate(similarity_matrix[index])), reverse=True, key=lambda x: x[1])
 
+    id = mv1[mv1['title'] == movie]['id'].iloc[0]
     rec_movie=[]
     rec_poster=[]
     rec_rating=[]
     for i in distances[0:100]:
         movie_id = mv1.iloc[i[0]].id
         poster_address, rating = get_poster_and_rating(movie_id)
-        if rating >= min_rating or movie_id == index:
+
+        #filtering out movies with min rating, selected movie gets a pass anyway for display
+        if rating >= min_rating or movie_id == id:
             rec_movie.append(mv1.iloc[i[0]].title)
             rec_poster.append(poster_address)
             rec_rating.append(rating)
