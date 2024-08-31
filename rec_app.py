@@ -41,7 +41,7 @@ def recommendme(movie, min_rating):
     
     return rec_df
 
-st.title("Movie Recommendation System With Current User Rating Filter")
+st.title("Dynamic Movie Recommendation System")
 st.subheader("by Avilash Barua")
 st.markdown("[GitHub](https://github.com/dcavilash/movie_rec_webapp) with Project Description")
 st.divider()
