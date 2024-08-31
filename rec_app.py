@@ -29,28 +29,37 @@ def recommendme(movie, min_rating):
     distance = sorted(list(enumerate(similarity_matrix[index])), reverse=True, key=lambda vector1:vector1[1])
 
     mv1_df = pd.DataFrame(mv1)
+    
     # Filter by minimum rating if applicable
     if min_rating != -1:
-        filtered_mv1_df = mv1_df[mv1_df['vote_average'] >= min_rating]
+        filtered_mv1_df = mv1_df[mv1_df['vote_average'] >= min_rating - 0.5]
 
         # Need to add selected movie in the dataframe if its lower than min_rating entered
 
         if index not in filtered_mv1_df['id'].values:
             row_to_add = mv1_df[mv1_df['id'] == index].iloc[0]
             filtered_mv1_df = pd.concat([filtered_mv1_df, row_to_add.to_frame().T], ignore_index=True)
- 
-    rec_movie=[]
-    rec_poster=[]
-    rec_rating=[]
+    else:
+        filtered_mv1_df = mv1_df
+    
+    rec_movies=[]
+    rec_posters=[]
+    rec_ratings=[]
     for i in distance[0:100]:
         movie_id = filtered_mv1_df.iloc[i[0]].id
         poster_address, rating = get_poster_and_rating(movie_id)
-        rec_movie.append(filtered_mv1_df.iloc[i[0]].title)
-        rec_poster.append(poster_address)
-        rec_rating.append(rating)
-    return rec_movie, rec_poster, rec_rating
+        rec_movies.append(filtered_mv1_df.iloc[i[0]].title)
+        rec_posters.append(poster_address)
+        rec_ratings.append(rating)
+    rec_df = pd.DataFrame({
+        'title': rec_movies,
+        'poster path': rec_posters,
+        'user rating': rec_ratings
+    })
+    
+    return rec_df
 
-#Page design
+####################        Page design      ########################################################################################################
 
 st.title("Movie Recommendation System With Current User Rating filter")
 st.header("by Avilash Barua")
@@ -59,17 +68,11 @@ st.divider()
 movie_selected = st.selectbox("Select or Search a Movie", movie_list)
 
 min_rating = -1                                        #default value
-min_rating = float(st.number_input("Minimun User Rating out of 10 (Optional)"))
+min_rating = float(st.slider("Minimun User Rating out of 10 (Optional)", min_value=0, max_value=8))
 
 
 if st.button("Get Recommendations"):
-    rec_movie_name, rec_movie_poster, rec_movie_rating = recommendme(movie_selected, min_rating)
-    
-    rec_df = pd.DataFrame({
-        'title': rec_movie_name,
-        'poster path': rec_movie_poster,
-        'user rating': rec_movie_rating
-    })
+    rec_df = recommendme(movie_selected, min_rating)
     
     cols_row0 = st.columns(4)
     with cols_row0[1]:
