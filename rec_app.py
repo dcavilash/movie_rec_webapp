@@ -41,7 +41,7 @@ def recommendme(movie, min_rating):
     rec_posters=[]
     rec_ratings=[]
     for i in distance[0:15]:
-        movie_id = filtered_mv1_df.iloc[i[0]].id
+        movie_id = filtered_mv1_df.iloc[i[0]]['id']
         poster_address, rating = get_poster_and_rating(movie_id)
         rec_movies.append(filtered_mv1_df.iloc[i[0]]['title'])
         rec_posters.append(poster_address)
@@ -51,6 +51,8 @@ def recommendme(movie, min_rating):
         'poster path': rec_posters,
         'user rating': rec_ratings
     })
+    #filtering with live min_rating again
+    rec_df = rec_df[rec_df['user rating' >= min_rating]]
     
     return rec_df
 
