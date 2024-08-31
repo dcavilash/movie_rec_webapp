@@ -49,20 +49,24 @@ with col2:
 if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating)
 
-    cols_row0 = st.columns(4)
-    with cols_row0[1]:
-        st.image(rec_df.iloc[0]['poster path'])
-    with cols_row0[2]:
-        st.text(rec_df.iloc[0]['title'])
-        st.divider()
-        st.text(f"User Rating: {rec_df.iloc[0]['user rating']}/10")
+    if len(rec_df) >= 11:
+        cols_row0 = st.columns(4)
+        with cols_row0[1]:
+            st.image(rec_df.iloc[0]['poster path'])
+        with cols_row0[2]:
+            st.text(rec_df.iloc[0]['title'])
+            st.divider()
+            st.text(f"User Rating: {rec_df.iloc[0]['user rating']}/10")
 
-    st.text("You might like:")
+        st.text("You might like:")
 
-    cols_row1, cols_row2 = st.columns(5, 5)
-    for i in range(1, 11):
-        col = cols_row1 if i <= 5 else cols_row2
-        with col[i % 5]:
-            st.image(rec_df.iloc[i]['poster path'])
-            st.text(rec_df.iloc[i]['title'])
-            st.text(f"User Rating: {rec_df.iloc[i]['user rating']}/10")
+        cols_row1 = st.columns(5)  # First row with 5 columns
+        cols_row2 = st.columns(5)  # Second row with 5 columns
+        for i in range(1, min(11, len(rec_df))):
+            col = cols_row1 if i <= 5 else cols_row2
+            with col[i % 5]:  # Adjust column index correctly
+                st.image(rec_df.iloc[i]['poster path'])
+                st.text(rec_df.iloc[i]['title'])
+                st.text(f"User Rating: {rec_df.iloc[i]['user rating']}/10")
+    else:
+        st.write("Not enough recommendations.")
