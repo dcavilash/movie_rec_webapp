@@ -28,9 +28,11 @@ def recommendme(movie, min_rating):
     if index not in filtered_mv1_df['id'].values:
         filtered_mv1_df = pd.concat([filtered_mv1_df, mv1_df[mv1_df['id'] == index].iloc[0].to_frame().T], ignore_index=True)
 
-    rec_df = filtered_mv1_df.iloc[[i[0] for i in distances[:18]]]
-    rec_df.loc[rec_df.index, 'poster path'] = rec_df['id'].apply(lambda x: get_poster_and_rating(x)[0])
-    rec_df.loc[rec_df.index, 'user rating'] = rec_df['id'].apply(lambda x: get_poster_and_rating(x)[1])
+    # Get the top 15 most similar movies
+    rec_df = filtered_mv1_df.iloc[[i[0] for i in distances[:15]]]
+    poster_rating_data = rec_df['id'].apply(get_poster_and_rating)
+    rec_df['poster path'], rec_df['user rating'] = zip(*poster_rating_data)
+
 
     return rec_df[rec_df['user rating'] >= min_rating]
 
@@ -48,25 +50,26 @@ with col2:
 
 if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating)
+    
+    num_recommendations = len(rec_df)
 
-    if len(rec_df) >= 11:
-        cols_row0 = st.columns(4)
-        with cols_row0[1]:
-            st.image(rec_df.iloc[0]['poster path'])
-        with cols_row0[2]:
-            st.text(rec_df.iloc[0]['title'])
-            st.divider()
-            st.text(f"User Rating: {rec_df.iloc[0]['user rating']}/10")
-
-        st.text("You might like:")
-
-        cols_row1 = st.columns(5)  # First row with 5 columns
-        cols_row2 = st.columns(5)  # Second row with 5 columns
-        for i in range(1, min(11, len(rec_df))):
-            col = cols_row1 if i <= 5 else cols_row2
-            with col[i % 5]:  # Adjust column index correctly
+    if num_recommendations >= 5:
+        # First row: 5 columns
+        cols_row1 = st.columns(5)
+        for i in range(5):  # Always fill 5 columns in the first row
+            with cols_row1[i]:
                 st.image(rec_df.iloc[i]['poster path'])
                 st.text(rec_df.iloc[i]['title'])
                 st.text(f"User Rating: {rec_df.iloc[i]['user rating']}/10")
+
+        # Second row: Up to 5 columns if more than 5 recommendations
+        if num_recommendations > 5:
+            cols_row2 = st.columns(min(5, num_recommendations - 5))
+            for i in range(min(5, num_recommendations - 5)):  # Fill the remaining columns in the second row
+                with cols_row2[i]:
+                    st.image(rec_df.iloc[i + 5]['poster path'])
+                    st.text(rec_df.iloc[i + 5]['title'])
+                    st.text(f"User Rating: {rec_df.iloc[i + 5]['user rating']}/10")
     else:
         st.write("Not enough recommendations.")
+
