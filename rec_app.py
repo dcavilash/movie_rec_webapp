@@ -37,7 +37,7 @@ def recommendme(movie, min_rating):
     return rec_df[rec_df['user rating'] >= min_rating]
 
 st.title("Movie Recommendation System With Current User Rating Filter")
-st.header("by Avilash Barua")
+st.subheader("by Avilash Barua")
 st.divider()
 
 movie_selected = st.selectbox("Select or Search a Movie", movie_list)
@@ -50,28 +50,27 @@ with col2:
 
 if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating)
-    
-    cols_row0 = st.columns(4)
-    with cols_row0[1]:
-        st.image(rec_df.iloc[0]['poster path'])
-        #
-        #
-    with cols_row0[2]:
-        st.text(rec_df.iloc[0]['title'])
-        st.divider()
-        st.text("User Rating: ")
-        st.text("{}/10".format(rec_df.iloc[0]['user rating']))
-
     num_recommendations = len(rec_df)
 
+
+
+
     if num_recommendations >= 5:
+        #main movie
+        cols_row0 = st.columns(4)
+        with cols_row0[1]:
+            st.image(rec_df.iloc[0]['poster path'])
+        with cols_row0[2]:
+            st.text(rec_df.iloc[0]['title'])
+            st.divider()
+            st.text("User Rating: ")
+            st.text("{}/10".format(rec_df.iloc[0]['user rating']))
         # First row: 5 columns
         cols_row1 = st.columns(5)
         for i in range(5):  # Always fill 5 columns in the first row
             with cols_row1[i]:
                 st.image(rec_df.iloc[i+1]['poster path'])
-                st.text(rec_df.iloc[i+1]['title'])
-                st.text(f"User Rating: {rec_df.iloc[i+1]['user rating']}/10")
+                st.text(f"{rec_df.iloc[i + 1]['title']}\nUser Rating: {rec_df.iloc[i + 1]['user rating']}/10")
 
         # Second row: Up to 5 columns if more than 5 recommendations
         if num_recommendations > 5:
@@ -79,8 +78,7 @@ if st.button("Get Recommendations"):
             for i in range(min(5, num_recommendations - 5)):  # Fill the remaining columns in the second row
                 with cols_row2[i]:
                     st.image(rec_df.iloc[i + 6]['poster path'])
-                    st.text(rec_df.iloc[i + 6]['title'])
-                    st.text(f"User Rating: {rec_df.iloc[i + 6]['user rating']}/10")
+                    st.text(f"{rec_df.iloc[i + 6]['title']}\nUser Rating: {rec_df.iloc[i + 6]['user rating']}/10")
     else:
         st.write("Not enough recommendations.")
 
