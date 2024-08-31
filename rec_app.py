@@ -66,7 +66,7 @@ col1, col2 = st.columns(2)
 with col1:
     st.write("Minimun User Rating:")
 with col2:
-    min_rating = float(st.slider("", min_value = 0, max_value = 8, step = 0.1))
+    min_rating = float(st.slider("", min_value = 0.0, max_value = 8.0, step = 0.1))
 
 
 if st.button("Get Recommendations"):
