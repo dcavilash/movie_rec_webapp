@@ -33,7 +33,6 @@ def recommendme(movie, min_rating):
     poster_rating_data = rec_df['id'].apply(get_poster_and_rating)
     rec_df['poster path'], rec_df['user rating'] = zip(*poster_rating_data)
 
-
     return rec_df[rec_df['user rating'] >= min_rating]
 
 st.title("Movie Recommendation System With Current User Rating Filter")
@@ -52,33 +51,29 @@ if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating)
     num_recommendations = len(rec_df)
 
-
-
-
-    if num_recommendations >= 5:
-        #main movie
+    if num_recommendations > 0:
+        # Display main movie (first row)
         cols_row0 = st.columns(4)
         with cols_row0[1]:
             st.image(rec_df.iloc[0]['poster path'])
         with cols_row0[2]:
-            st.text(rec_df.iloc[0]['title'])
+            st.text(f"{rec_df.iloc[0]['title']}\nUser Rating: {rec_df.iloc[0]['user rating']}/10")
             st.divider()
-            st.text("User Rating: ")
-            st.text("{}/10".format(rec_df.iloc[0]['user rating']))
+
         # First row: 5 columns
-        cols_row1 = st.columns(5)
-        for i in range(5):  # Always fill 5 columns in the first row
-            with cols_row1[i]:
-                st.image(rec_df.iloc[i+1]['poster path'])
-                st.text(f"{rec_df.iloc[i + 1]['title']}\nUser Rating: {rec_df.iloc[i + 1]['user rating']}/10")
+        if num_recommendations > 1:
+            cols_row1 = st.columns(min(5, num_recommendations - 1))
+            for i in range(1, min(6, num_recommendations)):  # Fill the first row, skipping the main movie
+                with cols_row1[i - 1]:
+                    st.image(rec_df.iloc[i]['poster path'])
+                    st.text(f"{rec_df.iloc[i]['title']}\n{rec_df.iloc[i]['user rating']}/10")
 
         # Second row: Up to 5 columns if more than 5 recommendations
-        if num_recommendations > 5:
-            cols_row2 = st.columns(min(5, num_recommendations - 5))
-            for i in range(min(5, num_recommendations - 5)):  # Fill the remaining columns in the second row
-                with cols_row2[i]:
-                    st.image(rec_df.iloc[i + 6]['poster path'])
-                    st.text(f"{rec_df.iloc[i + 6]['title']}\nUser Rating: {rec_df.iloc[i + 6]['user rating']}/10")
+        if num_recommendations > 6:
+            cols_row2 = st.columns(min(5, num_recommendations - 6))
+            for i in range(6, num_recommendations):  # Fill the second row
+                with cols_row2[i - 6]:
+                    st.image(rec_df.iloc[i]['poster path'])
+                    st.text(f"{rec_df.iloc[i]['title']}\n{rec_df.iloc[i]['user rating']}/10")
     else:
         st.write("Not enough recommendations.")
-
