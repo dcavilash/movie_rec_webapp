@@ -27,7 +27,7 @@ def recommendme(movie, min_rating):
     for i in distances[0:100]:
         movie_id = mv1.iloc[i[0]].id
         poster_address, rating = get_poster_and_rating(movie_id)
-        if rating >= min_rating:
+        if rating >= min_rating or movie_id == index:
             rec_movie.append(mv1.iloc[i[0]].title)
             rec_poster.append(poster_address)
             rec_rating.append(rating)
@@ -58,8 +58,8 @@ if st.button("Get Recommendations"):
         st.image(rec_df.iloc[0]['poster path'])
     with cols_row0[2]:
         st.text(f"{rec_df.iloc[0]['title']}")
-        st.text(f"User Rating: {rec_df.iloc[0]['user rating']}/10")
         st.divider()
+        st.text(f"User Rating: \n {rec_df.iloc[0]['user rating']}/10")
 
     cols_row1 = st.columns(5)
     for i in range(1, 6):  # Fill the first row, skipping the main movie
