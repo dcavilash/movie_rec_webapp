@@ -43,7 +43,7 @@ def recommendme(movie, min_rating):
 
 st.title("Movie Recommendation System With Current User Rating Filter")
 st.subheader("by Avilash Barua")
-st.markdown("[github link] with Project Descrition (https://github.com/dcavilash/movie_rec_webapp)")
+st.markdown("[GitHub link](https://github.com/dcavilash/movie_rec_webapp) with Project Descrition")
 st.divider()
 
 c1, c2 = st.columns(2)
