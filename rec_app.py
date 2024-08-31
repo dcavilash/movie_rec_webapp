@@ -29,8 +29,8 @@ def recommendme(movie, min_rating):
         movie_id = mv1.iloc[i[0]].id
         poster_address, rating = get_poster_and_rating(movie_id)
 
-        #filtering out movies with min rating, selected movie gets a pass anyway for display
-        if rating >= min_rating or movie_id == id:
+        #filtering out movies with min rating, selected movie is excluded
+        if rating >= min_rating and movie_id != id:
             rec_movie.append(mv1.iloc[i[0]].title)
             rec_poster.append(poster_address)
             rec_rating.append(rating)
@@ -45,7 +45,18 @@ st.title("Movie Recommendation System With Current User Rating Filter")
 st.subheader("by Avilash Barua")
 st.divider()
 
-movie_selected = st.selectbox("Select or Search a Movie", movie_list)
+c1, c2 = st.columns(2)
+with c1:
+    movie_selected = st.selectbox("Select or Search a Movie", ["Search Bar"], movie_list)
+if movie_selected and movie_selected != "Search Bar":
+    id = mv1[mv1['title'] == movie_selected]['id'].iloc[0]
+    m_sel_poster_address, m_sel_rating = get_poster_and_rating(id)
+    with c2:
+        c21, c22 = st.columns(2)
+        with c21:
+            st.image(m_sel_poster_address)
+        with c22:
+            st.text(f"User Rating: \n {m_sel_rating}/10")
 
 col1, col2 = st.columns(2)
 with col1:
@@ -56,16 +67,8 @@ with col2:
 if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating)
 
-    cols_row0 = st.columns(4)
-    with cols_row0[1]:
-        st.image(rec_df.iloc[0]['poster path'])
-    with cols_row0[2]:
-        st.text(f"{rec_df.iloc[0]['title']}")
-        st.divider()
-        st.text(f"User Rating: \n {rec_df.iloc[0]['user rating']}/10")
-
     cols_row1 = st.columns(5)
-    for i in range(1, 6):  # Fill the first row, skipping the main movie
+    for i in range(1, 6):  # Fill the first row
         with cols_row1[i - 1]:
             st.image(rec_df.iloc[i]['poster path'])
             st.text(f"{rec_df.iloc[i]['title']}\n{rec_df.iloc[i]['user rating']}/10")
