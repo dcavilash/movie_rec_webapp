@@ -31,7 +31,7 @@ def recommendme(movie, min_rating):
     mv1_df = pd.DataFrame(mv1)
     # Filter by minimum rating if applicable
     if min_rating != -1:
-        filtered_mv1_df = mv1_df[mv1_df['user rating'] >= min_rating]
+        filtered_mv1_df = mv1_df[mv1_df['vote_average'] >= min_rating]
 
         # Need to add selected movie in the dataframe if its lower than min_rating entered
 
