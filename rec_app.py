@@ -25,8 +25,17 @@ def recommendme(movie, min_rating):
     filtered_mv1_df = mv1_df[mv1_df['vote_average'] >= min_rating - 0.5]
 
     # Add selected movie if it's lower than min_rating
-    if index not in filtered_mv1_df['id'].values:
-        filtered_mv1_df = pd.concat([filtered_mv1_df, mv1_df[mv1_df['id'] == index].iloc[0].to_frame().T], ignore_index=True)
+    #if index not in filtered_mv1_df['id'].values:
+    #    filtered_mv1_df = pd.concat([filtered_mv1_df, mv1_df[mv1_df['id'] == index].iloc[0].to_frame().T], ignore_index=True)
+    # Check if the selected movie is present in filtered_mv1_df before adding
+    if index in filtered_mv1_df['id'].values:
+        selected_movie = filtered_mv1_df[filtered_mv1_df['id'] == index]
+    else:
+        selected_movie = mv1_df[mv1_df['id'] == index]
+
+    # Only add the movie if it exists (avoid empty dataframe)
+    if not selected_movie.empty:
+        filtered_mv1_df = pd.concat([filtered_mv1_df, selected_movie.iloc[0].to_frame().T], ignore_index=True)
 
     # Get the top 15 most similar movies
     rec_df = filtered_mv1_df.iloc[[i[0] for i in distances[:15]]]
@@ -62,7 +71,7 @@ if st.button("Get Recommendations"):
 
         # First row: 5 columns
         if num_recommendations > 1:
-            cols_row1 = st.columns(min(5, num_recommendations - 1))
+            cols_row1 = st.columns(5)
             for i in range(1, min(6, num_recommendations)):  # Fill the first row, skipping the main movie
                 with cols_row1[i - 1]:
                     st.image(rec_df.iloc[i]['poster path'])
@@ -70,7 +79,8 @@ if st.button("Get Recommendations"):
 
         # Second row: Up to 5 columns if more than 5 recommendations
         if num_recommendations > 6:
-            cols_row2 = st.columns(min(5, num_recommendations - 6))
+            st.divider()
+            cols_row2 = st.columns(5)
             for i in range(6, num_recommendations):  # Fill the second row
                 with cols_row2[i - 6]:
                     st.image(rec_df.iloc[i]['poster path'])
