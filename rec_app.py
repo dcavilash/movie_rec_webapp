@@ -32,6 +32,7 @@ def recommendme(movie, min_rating):
     
     # Filter by minimum rating
     filtered_mv1_df = mv1_df[mv1_df['vote_average'] >= min_rating - 0.5]
+    
     # Need to add selected movie in the dataframe if its lower than min_rating entered
     if index not in filtered_mv1_df['id'].values:
         row_to_add = mv1_df[mv1_df['id'] == index].iloc[0]
@@ -52,7 +53,7 @@ def recommendme(movie, min_rating):
         'user rating': rec_ratings
     })
     #filtering with live min_rating again
-    rec_df = rec_df[rec_df['user rating' >= min_rating]]
+    rec_df = rec_df[rec_df['user rating'] >= min_rating]
     
     return rec_df
 
