@@ -30,17 +30,12 @@ def recommendme(movie, min_rating):
 
     mv1_df = pd.DataFrame(mv1)
     
-    # Filter by minimum rating if applicable
-    if min_rating != -1:
-        filtered_mv1_df = mv1_df[mv1_df['vote_average'] >= min_rating - 0.5]
-
-        # Need to add selected movie in the dataframe if its lower than min_rating entered
-
-        if index not in filtered_mv1_df['id'].values:
-            row_to_add = mv1_df[mv1_df['id'] == index].iloc[0]
-            filtered_mv1_df = pd.concat([filtered_mv1_df, row_to_add.to_frame().T], ignore_index=True)
-    else:
-        filtered_mv1_df = mv1_df
+    # Filter by minimum rating
+    filtered_mv1_df = mv1_df[mv1_df['vote_average'] >= min_rating - 0.5]
+    # Need to add selected movie in the dataframe if its lower than min_rating entered
+    if index not in filtered_mv1_df['id'].values:
+        row_to_add = mv1_df[mv1_df['id'] == index].iloc[0]
+        filtered_mv1_df = pd.concat([filtered_mv1_df, row_to_add.to_frame().T], ignore_index=True)
     
     rec_movies=[]
     rec_posters=[]
@@ -67,8 +62,11 @@ st.divider()
 
 movie_selected = st.selectbox("Select or Search a Movie", movie_list)
 
-min_rating = -1                                        #default value
-min_rating = float(st.slider("Minimun User Rating out of 10 (Optional)", min_value=0, max_value=8))
+col1, col2 = st.columns(2)
+with col1:
+    st.write("Minimun User Rating:")
+with col2:
+    min_rating = float(st.slider("", min_value = 0, max_value = 8, step = 0.1))
 
 
 if st.button("Get Recommendations"):
