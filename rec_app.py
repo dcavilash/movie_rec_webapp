@@ -29,8 +29,8 @@ def recommendme(movie, min_rating):
         filtered_mv1_df = pd.concat([filtered_mv1_df, mv1_df[mv1_df['id'] == index].iloc[0].to_frame().T], ignore_index=True)
 
     rec_df = filtered_mv1_df.iloc[[i[0] for i in distances[:18]]]
-    rec_df['poster path'] = rec_df['id'].apply(lambda x: get_poster_and_rating(x)[0])
-    rec_df['user rating'] = rec_df['id'].apply(lambda x: get_poster_and_rating(x)[1])
+    rec_df.loc[rec_df.index, 'poster path'] = rec_df['id'].apply(lambda x: get_poster_and_rating(x)[0])
+    rec_df.loc[rec_df.index, 'user rating'] = rec_df['id'].apply(lambda x: get_poster_and_rating(x)[1])
 
     return rec_df[rec_df['user rating'] >= min_rating]
 
