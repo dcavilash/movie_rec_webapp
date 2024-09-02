@@ -3,7 +3,7 @@ Project Description:
 
 Developed a movie recommendation system to provide personalized movie suggestions based on user ratings and similarity metrics. This interactive web application leverages Python, Streamlit, and various data science techniques to deliver a seamless user experience.
 
-**Tools Used:**
+<h>Tools Used:</h>
 
 Jupyter Notebook (analysis.ipynb) : Data Cleaning, testing codes on raw csv data(not included due to file size) from kaggle.com and generating cosine similarity matrix file.</br>
 Python: For data processing and algorithm implementation.</br>
