@@ -5,11 +5,11 @@ Developed a movie recommendation system to provide personalized movie suggestion
 
 **Tools Used:**
 
-Jupyter Notebook (analysis.ipynb) : Data Cleaning, testing codes on raw csv data(not included due to file size) from kaggle.com and generating cosine similarity matrix file.
-Python: For data processing and algorithm implementation.
-Streamlit: For creating an interactive and user-friendly web application interface.
-scikit-learn: For calculating movie similarity and generating recommendations.
-pandas: For data manipulation and filtering.
+Jupyter Notebook (analysis.ipynb) : Data Cleaning, testing codes on raw csv data(not included due to file size) from kaggle.com and generating cosine similarity matrix file.</br>
+Python: For data processing and algorithm implementation.</br>
+Streamlit: For creating an interactive and user-friendly web application interface.</br>
+scikit-learn: For calculating movie similarity and generating recommendations.</br>
+pandas: For data manipulation and filtering.</br>
 requests: For fetching real-time movie data from the TMDb API.
 kaggle.com: for downloading latest tmdb dataset.
 Key Features:
