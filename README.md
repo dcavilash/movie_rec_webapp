@@ -10,8 +10,9 @@ Python: For data processing and algorithm implementation.</br>
 Streamlit: For creating an interactive and user-friendly web application interface.</br>
 scikit-learn: For calculating movie similarity and generating recommendations.</br>
 pandas: For data manipulation and filtering.</br>
-requests: For fetching real-time movie data from the TMDb API.
-kaggle.com: for downloading latest tmdb dataset.
+requests: For fetching real-time movie data from the TMDb API.</br>
+kaggle.com: for downloading latest tmdb dataset.</br>
+
 Key Features:
 
 Data Integration: Utilized pickle to load and manage movie data and similarity matrices, ensuring efficient data handling.
