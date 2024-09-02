@@ -42,15 +42,16 @@ def recommendme(movie, min_rating):
     return rec_df
 
 st.title("Dynamic Movie Recommendation System")
-#st.subheader("by Avilash Barua")
-st.markdown("dcavilash@ github project")
-#st.markdown("[GitHub](https://github.com/dcavilash/movie_rec_webapp) with Project Description")
+st.subheader("by Avilash Barua")
+#st.markdown("dcavilash@ github project")
+st.markdown("[GitHub](https://github.com/dcavilash/movie_rec_webapp) with Project Description")
 st.divider()
 
 c1, c2 = st.columns(2)
 with c1:
     movie_selected = st.selectbox("Select or Search a Movie", [""] + movie_list)
     st.divider()
+    min_rating = 0.0
     min_rating = float(st.slider("Minimum User Rating:", min_value=0.0, max_value=8.0, step=0.1, value=0.0))
 
 if movie_selected and movie_selected != "":
