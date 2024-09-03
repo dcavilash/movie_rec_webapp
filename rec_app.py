@@ -12,11 +12,15 @@ similarity_matrix = pickle.load(open('similarity.pkl', 'rb'))
 my_api_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNWY1ZTc1ZDgyNjMzYTU5NmE4ZWJkM2ZkYzgwZTM2YSIsIm5iZiI6MTcyNDk4MDY5MC4xMjY1ODQsInN1YiI6IjY2ZDExOGUwNmRmMzFjZGNhMzMwNDVkZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.CieuhUZpIRe6qQlEg0IlIXR28pba6V44j7GY07VkzUs"
 headers = {"accept": "application/json", "Authorization": "Bearer " + my_api_token}
 
+
+@st.cache_data(persist=True)
 def get_poster_and_rating(movie_id):
     url = f"https://api.themoviedb.org/3/movie/{movie_id}?language=en-US"
     data = requests.get(url, headers=headers).json()
     return f"https://image.tmdb.org/t/p/w500/{data['poster_path']}", data['vote_average']
 
+
+@st.cache_data(persist=True)
 def recommendme(movie, min_rating):
     index = mv1[mv1['title'] == movie].index[0]
     distances = sorted(list(enumerate(similarity_matrix[index])), reverse=True, key=lambda x: x[1])
