@@ -29,11 +29,12 @@ def recommendme(movie, min_rating, selected_genres):
     
     # Get the ID of the selected movie
     id = mv1[mv1['title'] == movie]['id'].iloc[0]
-    
-    # Initialize lists for recommendations
-    rec_movie = []
-    rec_poster = []
-    rec_rating = []
+    m_sel_poster_address, m_sel_rating = get_poster_and_rating(id)
+
+    # Initialize lists for recommendations (include the selected movie first)
+    rec_movie = [mv1.iloc[index].title]
+    rec_poster = [m_sel_poster_address]
+    rec_rating = [m_sel_rating]
 
     # Filter and sort movies
     for i in distances:
