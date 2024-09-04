@@ -79,7 +79,7 @@ if movie_selected and movie_selected != "":
             selected_genres = st.multiselect("Filter by Genre:", options = genres_of_selected_movie, default = genres_of_selected_movie)
 
 if st.button("Get Recommendations"):
-    rec_df = recommendme(movie_selected, min_rating)
+    rec_df = recommendme(movie_selected, min_rating, selected_genres)
 
     cols_row1 = st.columns(5)
     for i in range(1, 6):  # Fill the first row
