@@ -63,6 +63,10 @@ with c1:
     st.divider()
     min_rating = 0.0
     min_rating = float(st.slider("Minimum User Rating:", min_value=0.0, max_value=8.0, step=0.1, value=0.0))
+    st.divider()
+    #create genre toggle buttons
+    genres_of_selected_movie = mv1[mv1['title'] == movie_selected]['genres'].values[0].split(", ")
+    selected_genres = st.multiselect("Filter by Genre:", options = genres_of_selected_movie, default = genres_of_selected_movie)
 
 if movie_selected and movie_selected != "":
     id = mv1[mv1['title'] == movie_selected]['id'].iloc[0]
@@ -73,10 +77,6 @@ if movie_selected and movie_selected != "":
             st.image(m_sel_poster_address)
         with c22:
             st.markdown(f"User Rating:<br><b><span style='font-size:20px'>{m_sel_rating}</b>/10", unsafe_allow_html=True)
-
-            #create genre toggle buttons
-            genres_of_selected_movie = mv1[mv1['title'] == movie_selected]['genres'].values[0].split(", ")
-            selected_genres = st.multiselect("Filter by Genre:", options = genres_of_selected_movie, default = genres_of_selected_movie)
 
 if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating, selected_genres)
