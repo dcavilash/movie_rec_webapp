@@ -57,7 +57,7 @@ def recommendme(movie, min_rating, selected_genres):
         rec_rating.append(rating)
         
         # Break loop if we have enough recommendations
-        if len(rec_movie) >= 8:
+        if len(rec_movie) == 9:
             break
 
     # Create DataFrame with recommendations
