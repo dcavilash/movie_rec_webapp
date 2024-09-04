@@ -46,10 +46,11 @@ def recommendme(movie, min_rating, selected_genres):
         if rating < min_rating:
             continue  # Skip movies below the minimum rating
         
-        # Filter by selected genres
-        recommended_movie_genres = set(mv1.iloc[i[0]].genres.split(", "))
-        if not any(genre in selected_genres for genre in recommended_movie_genres):
-            continue  # Skip if none of the selected genres match
+        # Filter by selected genres if applicable
+        if selected_genres:
+            recommended_movie_genres = set(mv1.iloc[i[0]].genres.split(", "))
+            if not any(genre in selected_genres for genre in recommended_movie_genres):
+                continue  # Skip if none of the selected genres match
         
         # Append valid recommendations
         rec_movie.append(mv1.iloc[i[0]].title)
@@ -92,7 +93,7 @@ if movie_selected and movie_selected != "":
             
 #create genre toggle buttons
 genres_of_selected_movie = mv1[mv1['title'] == movie_selected]['genres'].values[0].split(", ")
-selected_genres = st.multiselect("Filter by Genre:", options = genres_of_selected_movie, default = genres_of_selected_movie)
+selected_genres = st.multiselect("Filter by Genre:", options = genres_of_selected_movie, default = None)
 
 if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating, selected_genres)
