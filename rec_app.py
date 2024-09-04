@@ -21,7 +21,7 @@ def get_poster_and_rating(movie_id):
 
 
 @st.cache_data(persist=True)
-def recommendme(movie, min_rating):
+def recommendme(movie, min_rating, selected_genres):
     index = mv1[mv1['title'] == movie].index[0]
     distances = sorted(list(enumerate(similarity_matrix[index])), reverse=True, key=lambda x: x[1])
 
@@ -35,6 +35,10 @@ def recommendme(movie, min_rating):
 
         #filtering out movies with min rating, selected movie is excluded
         if rating >= min_rating and movie_id != id:
+            recommended_movie_genres = mv1.iloc[i[0]].genres.split(", ")
+            # filter by selected genres
+            if not any(genre in selected_genres for genre in recommended_movie_genres):
+                continue
             rec_movie.append(mv1.iloc[i[0]].title)
             rec_poster.append(poster_address)
             rec_rating.append(rating)
@@ -44,6 +48,8 @@ def recommendme(movie, min_rating):
             break
     
     return rec_df
+
+
 
 st.title("Dynamic Movie Recommendation System")
 st.subheader("by Avilash Barua")
@@ -67,6 +73,10 @@ if movie_selected and movie_selected != "":
             st.image(m_sel_poster_address)
         with c22:
             st.markdown(f"User Rating:<br><b><span style='font-size:20px'>{m_sel_rating}</b>/10", unsafe_allow_html=True)
+
+            #create genre toggle buttons
+            genres_of_selected_movie = mv1[mv1['title'] == movie_selected]['genres'].values[0].split(", ")
+            selected_genres = st.multiselect("Filter by Genre:", options = genres_of_selected_movie, default = genres_of_selected_movie)
 
 if st.button("Get Recommendations"):
     rec_df = recommendme(movie_selected, min_rating)
