@@ -69,9 +69,11 @@ def recommendme(movie, min_rating, selected_genres):
 
 
 st.title("Dynamic Movie Recommendation System")
-st.subheader("by Avilash Barua")
-#st.markdown("dcavilash@ github project")
-st.markdown("[GitHub](https://github.com/dcavilash/movie_rec_webapp) with Project Description")
+with st.expander("info"):
+    st.text("Avilash's Project")
+    #st.subheader("by Avilash Barua")
+    #st.markdown("dcavilash@ github project")
+    st.markdown("[GitHub](https://github.com/dcavilash/movie_rec_webapp) with Project Description")
 st.divider()
 
 c1, c2 = st.columns(2)
